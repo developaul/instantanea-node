@@ -21,6 +21,18 @@ class User {
       throw error
     }
   }
+
+  async getUserById({ userId }) {
+    try {
+      const user = await UserModel.findOne({ _id: userId }).lean()
+
+      if (!user) throw new Error('El usuario no existe')
+
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 module.exports = new User()
