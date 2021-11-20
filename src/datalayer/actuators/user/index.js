@@ -32,10 +32,7 @@ class User {
       const salt = bcryptjs.genSaltSync(10)
       userInput.password = bcryptjs.hashSync(password, salt)
 
-      const user = new UserModel(userInput)
-      await user.save()
-
-      return user
+      return await UserModel.create(userInput)
     } catch (error) {
       throw error
     }

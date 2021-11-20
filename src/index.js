@@ -1,12 +1,14 @@
 const { ApolloServer } = require('apollo-server')
 
+const context = require('./service/graphql/context')
 const connection = require('./config/connections')
 const schema = require('./service/graphql')
 
 connection()
 
 const server = new ApolloServer({
-  schema
+  schema,
+  context
 })
 
 server.listen().then(({ port }) => {
