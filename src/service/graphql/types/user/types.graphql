@@ -1,9 +1,12 @@
 type User {
   _id: ID
+  email: String
   userName: String
   firstName: String
   lastName: String
   description: String
   photo: String
+  createdAt: String
+  updatedAt: String
 }
 

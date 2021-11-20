@@ -1,5 +1,11 @@
 type Mutation {
-  createUser(user: UserInput!): User
+  createUser(
+    email: String!
+    userName: String!
+    firstName: String!
+    lastName: String!
+    password: String!
+  ): User
 
   updateUser(userId: ID!): User
 }
