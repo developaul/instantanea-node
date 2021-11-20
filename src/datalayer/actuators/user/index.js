@@ -13,7 +13,7 @@ class User {
       if (!isValidPassword) throw new Error('Email o password incorrecto')
 
       return {
-        token: generateToken({ userId: _id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
+        token: generateToken({ userId: user._id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
         user
       }
     } catch (error) {
@@ -32,7 +32,12 @@ class User {
       const salt = bcryptjs.genSaltSync(10)
       userInput.password = bcryptjs.hashSync(password, salt)
 
-      return await UserModel.create(userInput)
+      const user = await UserModel.create(userInput)
+
+      return {
+        token: generateToken({ userId: user._id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
+        user
+      }
     } catch (error) {
       throw error
     }
