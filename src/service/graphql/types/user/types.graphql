@@ -1,4 +1,9 @@
 type User {
   _id: ID
   userName: String
+  firstName: String
+  lastName: String
+  description: String
+  photo: String
 }
+

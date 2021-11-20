@@ -1,6 +1,9 @@
 const { ApolloServer } = require('apollo-server')
 
+const connection = require('./config/connections')
 const schema = require('./service/graphql')
+
+connection()
 
 const server = new ApolloServer({
   schema
