@@ -1,8 +1,27 @@
 const bcryptjs = require('bcryptjs')
 
 const UserModel = require('../../models/mongo/user')
-
+const { generateToken } = require('../../../utils')
 class User {
+  async authenticateUser({ email, password }) {
+    try {
+      const user = await UserModel.findOne({ email }).lean()
+
+      if (!user) throw new Error('Email o password incorrecto')
+
+      const isValidPassword = bcryptjs.compareSync(password, user.password)
+      if (!isValidPassword) throw new Error('Email o password incorrecto')
+
+      return {
+        token: generateToken({ userId: _id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
+        user
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+
   async createUser(userInput) {
     try {
       const { userName, email, password } = userInput

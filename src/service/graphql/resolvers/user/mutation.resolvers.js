@@ -7,6 +7,11 @@ const Mutation = {
     User.createUser(args)
       .catch(error => {
         throw new ApolloError(error)
+      }),
+  authenticateUser: (_, args) =>
+    User.authenticateUser(args)
+      .catch(error => {
+        throw new ApolloError(error)
       })
 }
 

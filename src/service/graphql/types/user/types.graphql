@@ -10,3 +10,7 @@ type User {
   updatedAt: String
 }
 
+type AuthUser {
+  token: String
+  user: User
+}
