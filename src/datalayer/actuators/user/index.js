@@ -21,7 +21,6 @@ class User {
     }
   }
 
-
   async createUser(userInput) {
     try {
       const { userName, email, password } = userInput
