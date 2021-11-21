@@ -1,7 +1,11 @@
 const bcryptjs = require('bcryptjs')
 
 const UserModel = require('../../models/mongo/user')
+const { createFollowed } = require('../followed')
+const { createFollowing } = require('../following')
+
 const { generateToken } = require('../../../utils')
+
 class User {
   async authenticateUser({ email, password }) {
     try {
@@ -32,9 +36,15 @@ class User {
       userInput.password = bcryptjs.hashSync(password, salt)
 
       const user = await UserModel.create(userInput)
+      const { _id } = user
+
+      await Promise.all([
+        createFollowing(_id),
+        createFollowed(_id)
+      ])
 
       return {
-        token: generateToken({ userId: user._id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
+        token: generateToken({ userId: _id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
         user
       }
     } catch (error) {
@@ -49,6 +59,23 @@ class User {
       const user = await UserModel.findOne({ _id: userId }).lean()
 
       if (!user) throw new Error('El usuario no existe')
+
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getUserByUserName({ userName }) {
+    try {
+
+      const user = await UserModel.aggregate([
+        {
+          $match: {
+            userName
+          }
+        }
+      ])
 
       return user
     } catch (error) {

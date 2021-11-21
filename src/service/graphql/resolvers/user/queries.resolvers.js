@@ -5,6 +5,11 @@ const Query = {
     User.getUser(context)
       .catch(error => {
         throw new ApolloError(error)
+      }),
+  getUserByUserName: (_, args) =>
+    User.getUserByUserName(args)
+      .catch(error => {
+        throw new ApolloError(error)
       })
 }
 
