@@ -1,23 +1,26 @@
 
-const { Schema } = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const FollowerSchema = Schema({
-  type: {
-    type: String,
-    required: true,
-    enum: ['User']
-  },
-  status: {
-    type: String,
-    required: true,
-    default: 'actived',
-    enum: ['actived']
-  },
-  refId: {
+  follower: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'User'
-  }
+  },
+  followee: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  start: {
+    type: Date,
+    default: new Date()
+  },
+  status: {
+    type: String,
+    default: 'actived',
+    enum: ['actived']
+  },
 }, { timestamps: true })
 
-module.exports = FollowerSchema
+module.exports = model('Follower', FollowerSchema)

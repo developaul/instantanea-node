@@ -1,8 +1,6 @@
 const bcryptjs = require('bcryptjs')
 
 const UserModel = require('../../models/mongo/user')
-const { createFollowed } = require('../followed')
-const { createFollowing } = require('../following')
 
 const { generateToken } = require('../../../utils')
 
@@ -36,15 +34,9 @@ class User {
       userInput.password = bcryptjs.hashSync(password, salt)
 
       const user = await UserModel.create(userInput)
-      const { _id } = user
-
-      await Promise.all([
-        createFollowing(_id),
-        createFollowed(_id)
-      ])
 
       return {
-        token: generateToken({ userId: _id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
+        token: generateToken({ userId: user._id, secretWord: process.env.SECRET_WORD, expiresIn: '24h' }),
         user
       }
     } catch (error) {
@@ -73,6 +65,11 @@ class User {
         {
           $match: {
             userName
+          }
+        },
+        {
+          $lookup: {
+
           }
         }
       ])
