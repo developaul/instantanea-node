@@ -1,14 +1,8 @@
-// createUser: async (_, args) =>
-// User.createUser(args)
-//   .catch(error => {
-//     throw new ApolloError(error)
-//   }),
-
 const User = require("../../../../datalayer/actuators/user")
 
 const Query = {
-  getUserById: (_, args) =>
-    User.getUserById(args)
+  getUser: (_, __, context) =>
+    User.getUser(context)
       .catch(error => {
         throw new ApolloError(error)
       })

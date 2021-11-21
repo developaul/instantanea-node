@@ -42,8 +42,10 @@ class User {
     }
   }
 
-  async getUserById({ userId }) {
+  async getUser(context) {
     try {
+      const { userId } = context.user
+
       const user = await UserModel.findOne({ _id: userId }).lean()
 
       if (!user) throw new Error('El usuario no existe')
