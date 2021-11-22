@@ -1,6 +1,8 @@
 const bcryptjs = require('bcryptjs')
+const { Types: { ObjectId } } = require('mongoose')
 
 const UserModel = require('../../models/mongo/user')
+const FollowerModel = require('../../models/mongo/follower')
 
 const { generateToken } = require('../../../utils')
 
@@ -58,21 +60,94 @@ class User {
     }
   }
 
-  async getUserByUserName({ userName }) {
+  async getUserByUserName({ userName }, context) {
     try {
+      const { userId } = context.user
 
-      const user = await UserModel.aggregate([
-        {
-          $match: {
-            userName
+      const [[user], currentUserIsFollowing] = await Promise.all([
+        UserModel.aggregate([
+          {
+            $match: {
+              userName
+            }
+          },
+          {
+            $lookup: {
+              let: { userId: '$_id' },
+              from: 'followers',
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ['$$userId', '$followee'] },
+                        { $eq: ['$status', 'actived'] }
+                      ]
+                    }
+                  },
+                },
+                {
+                  $count: 'followers'
+                }
+              ],
+              as: 'followers'
+            }
+          },
+          {
+            $lookup: {
+              let: { userId: '$_id' },
+              from: 'followers',
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ['$$userId', '$follower'] },
+                        { $eq: ['$status', 'actived'] }
+                      ]
+                    }
+                  },
+                },
+                {
+                  $count: 'following'
+                }
+              ],
+              as: 'following'
+            }
+          },
+          {
+            $unwind: {
+              path: '$following',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $unwind: {
+              path: '$followers',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $project: {
+              _id: 1,
+              email: 1,
+              userName: 1,
+              firstName: 1,
+              lastName: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              description: 1,
+              followers: '$followers.followers',
+              following: '$following.following',
+            }
           }
-        },
-        {
-          $lookup: {
-
-          }
-        }
+        ]),
+        FollowerModel.exists({ follower: ObjectId(userId) })
       ])
+
+      user.currentUserIsFollowing = currentUserIsFollowing
+
+      console.log("🚀 ~ getUserByUserName ~ user", user)
 
       return user
     } catch (error) {
@@ -80,5 +155,12 @@ class User {
     }
   }
 }
+
+// $group: {
+//   _id: {
+//     followee: '$followee',
+//     follower: '$follower'
+//   }
+// }       
 
 module.exports = new User()

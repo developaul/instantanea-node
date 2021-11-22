@@ -1,13 +1,13 @@
-const User = require("../../../../datalayer/actuators/user")
+const user = require("../../../../datalayer/actuators/user")
 
 const Query = {
   getUser: (_, __, context) =>
-    User.getUser(context)
+    user.getUser(context)
       .catch(error => {
         throw new ApolloError(error)
       }),
-  getUserByUserName: (_, args) =>
-    User.getUserByUserName(args)
+  getUserByUserName: (_, args, context) =>
+    user.getUserByUserName(args, context)
       .catch(error => {
         throw new ApolloError(error)
       })

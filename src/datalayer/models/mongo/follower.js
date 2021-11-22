@@ -12,10 +12,6 @@ const FollowerSchema = Schema({
     required: true,
     ref: 'User'
   },
-  start: {
-    type: Date,
-    default: new Date()
-  },
   status: {
     type: String,
     default: 'actived',
