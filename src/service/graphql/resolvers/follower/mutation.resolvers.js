@@ -8,6 +8,12 @@ const Mutation = {
       .catch(error => {
         throw new ApolloError(error)
       }),
+  removeFollow: (_, args, context) =>
+    follower.removeFollow(args, context)
+      .catch(error => {
+        throw new ApolloError(error)
+      }),
+
 }
 
 module.exports = { Mutation }

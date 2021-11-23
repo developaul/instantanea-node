@@ -1,5 +1,9 @@
 type Mutation {
   createFollower(
     followeeId: ID!
-  ): String
+  ): Follower
+
+  removeFollow(
+    followeeId: ID!
+  ): Follower
 }

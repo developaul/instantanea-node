@@ -1,0 +1,5 @@
+type Follower {
+  _id: ID
+  follower: ID
+  followee: ID
+}

@@ -81,7 +81,6 @@ class User {
                     $expr: {
                       $and: [
                         { $eq: ['$$userId', '$followee'] },
-                        { $eq: ['$status', 'actived'] }
                       ]
                     }
                   },
@@ -102,8 +101,7 @@ class User {
                   $match: {
                     $expr: {
                       $and: [
-                        { $eq: ['$$userId', '$follower'] },
-                        { $eq: ['$status', 'actived'] }
+                        { $eq: ['$$userId', '$follower'] }
                       ]
                     }
                   },
@@ -139,7 +137,7 @@ class User {
               updatedAt: 1,
               description: 1,
               followers: '$followers.followers',
-              following: '$following.following',
+              following: '$following.following'
             }
           }
         ]),
@@ -147,9 +145,6 @@ class User {
       ])
 
       user.currentUserIsFollowing = currentUserIsFollowing
-
-      console.log("🚀 ~ getUserByUserName ~ user", user)
-
       return user
     } catch (error) {
       throw error
