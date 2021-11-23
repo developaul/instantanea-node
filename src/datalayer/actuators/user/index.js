@@ -134,6 +134,7 @@ class User {
               userName: 1,
               firstName: 1,
               lastName: 1,
+              photo: 1,
               createdAt: 1,
               updatedAt: 1,
               description: 1,
