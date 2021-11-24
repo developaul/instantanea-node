@@ -153,7 +153,6 @@ class User {
 
   async getSuggestedUsers(context) {
     try {
-
       const { userId } = context.user
 
       const followeds = await FollowerModel.find({ follower: userId }, { _id: 0, followee: 1 }).lean()
