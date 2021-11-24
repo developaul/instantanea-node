@@ -155,10 +155,13 @@ class User {
     try {
       const { userId } = context.user
 
-      const followeds = await FollowerModel.find({ follower: userId }, { _id: 0, followee: 1 }).lean()
-      const followedsIds = followeds.map(({ followee }) => String(followee))
+      const followeds = await FollowerModel.find({ follower: ObjectId(userId) }, { _id: 0, followee: 1 }).lean()
+      const followedsIds = followeds.map(({ followee }) => ObjectId(followee))
+      followedsIds.push(ObjectId(userId))
 
-      const users = await UserModel.find({ _id: { $nin: followedsIds } }).sort({ createdAt: -1 }).limit(4).lean()
+      const users = await UserModel.find({
+        _id: { $nin: followedsIds }
+      }).sort({ createdAt: -1 }).limit(4).lean()
 
       return users
     } catch (error) {
