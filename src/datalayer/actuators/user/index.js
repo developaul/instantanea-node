@@ -150,13 +150,22 @@ class User {
       throw error
     }
   }
-}
 
-// $group: {
-//   _id: {
-//     followee: '$followee',
-//     follower: '$follower'
-//   }
-// }       
+  async getSuggestedUsers(context) {
+    try {
+
+      const { userId } = context.user
+
+      const followeds = await FollowerModel.find({ follower: userId }, { _id: 0, followee: 1 }).lean()
+      const followedsIds = followeds.map(({ followee }) => String(followee))
+
+      const users = await UserModel.find({ _id: { $nin: followedsIds } }).sort({ createdAt: -1 }).limit(4).lean()
+
+      return users
+    } catch (error) {
+      throw error(error)
+    }
+  }
+}
 
 module.exports = new User()

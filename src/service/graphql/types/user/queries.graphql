@@ -2,4 +2,6 @@ type Query {
   getUser: User
 
   getUserByUserName(userName: String!): Profile
+
+  getSuggestedUsers: [User]
 }

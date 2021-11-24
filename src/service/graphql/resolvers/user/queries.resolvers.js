@@ -10,6 +10,11 @@ const Query = {
     user.getUserByUserName(args, context)
       .catch(error => {
         throw new ApolloError(error)
+      }),
+  getSuggestedUsers: (_, __, context) =>
+    user.getSuggestedUsers(context)
+      .catch(error => {
+        throw new ApolloError(error)
       })
 }
 
