@@ -29,3 +29,16 @@ type Profile {
   following: Int
   currentUserIsFollowing: Boolean
 }
+
+type ShortProfile {
+  _id: ID
+  email: String
+  userName: String
+  firstName: String 
+  lastName: String
+  photo: String
+  description: String
+  createdAt: String
+  updatedAt: String
+  currentUserIsFollowing: Boolean
+}

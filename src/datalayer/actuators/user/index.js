@@ -161,7 +161,10 @@ class User {
 
       const users = await UserModel.find({
         _id: { $nin: followedsIds }
-      }).sort({ createdAt: -1 }).limit(4).lean()
+      })
+        .sort({ createdAt: -1 })
+        .limit(4)
+        .lean()
 
       return users
     } catch (error) {
