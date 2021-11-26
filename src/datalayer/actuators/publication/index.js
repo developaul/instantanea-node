@@ -71,11 +71,17 @@ class Publication {
                           ]
                         }
                       },
-                    },
+                    }
                   ],
-                  as: 'comments'
+                  as: 'user'
                 }
               },
+              {
+                $unwind: {
+                  path: '$user',
+                  preserveNullAndEmptyArrays: true
+                }
+              }
             ],
             as: 'comments'
           }
