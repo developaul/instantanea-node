@@ -166,7 +166,7 @@ class User {
         .limit(4)
         .lean()
 
-      return users
+      return users.map(user => ({ ...user, currentUserIsFollowing: false }))
     } catch (error) {
       throw error(error)
     }
