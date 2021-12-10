@@ -1,4 +1,5 @@
 type Publication {
+  _id: ID
   status: String
   createdBy: User
   media: String

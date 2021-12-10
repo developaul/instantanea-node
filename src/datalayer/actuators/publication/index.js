@@ -1,16 +1,23 @@
 const PublicationModel = require('../../models/mongo/publication')
+const UserModel = require('../../models/mongo/user')
 
 class Publication {
   async createPublication(publicationInput, context) {
     try {
       const { userId } = context.user
 
-      const publication = await PublicationModel.create({
-        ...publicationInput,
-        createdBy: userId
-      })
+      const [publication, user] = await Promise.all([
+        PublicationModel.create({
+          ...publicationInput,
+          createdBy: userId
+        }),
+        UserModel.findById(userId).lean()
+      ])
 
-      return publication
+      return {
+        ...publication,
+        createdBy: user
+      }
     } catch (error) {
       throw error
     }
