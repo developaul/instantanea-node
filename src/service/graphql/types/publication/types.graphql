@@ -1,0 +1,6 @@
+type Publication {
+  status: String
+  createdBy: User
+  media: String
+  description: String
+}

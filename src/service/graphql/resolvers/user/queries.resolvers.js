@@ -1,3 +1,4 @@
+const { ApolloError } = require("apollo-server-errors")
 const user = require("../../../../datalayer/actuators/user")
 
 const Query = {
