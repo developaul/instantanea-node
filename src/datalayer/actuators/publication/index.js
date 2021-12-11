@@ -94,6 +94,30 @@ class Publication {
           }
         },
         {
+          $lookup: {
+            let: { userId: '$createdBy' },
+            from: 'users',
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$$userId', '$_id'] },
+                    ]
+                  }
+                },
+              },
+            ],
+            as: 'createdBy'
+          }
+        },
+        {
+          $unwind: {
+            path: '$createdBy',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
           $sort: { createdAt: -1 }
         },
         {
