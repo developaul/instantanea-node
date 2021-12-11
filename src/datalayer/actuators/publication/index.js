@@ -163,9 +163,121 @@ class Publication {
         }
       ])
 
-      console.log("🚀 ~ getShortPublications ~ publications", publications)
-
       return publications
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getPublication({ publicationId }) {
+    try {
+
+      const [publication] = await PublicationModel.aggregate([
+        {
+          $match: {
+            status: 'published',
+            _id: ObjectId(publicationId)
+          }
+        },
+        {
+          $lookup: {
+            let: { publicationId: '$_id' },
+            from: 'likes',
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$$publicationId', '$publicationId'] },
+                    ]
+                  }
+                },
+              },
+              {
+                $count: 'likes'
+              }
+            ],
+            as: 'likes'
+          }
+        },
+        {
+          $lookup: {
+            let: { publicationId: '$_id' },
+            from: 'comments',
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$$publicationId', '$publicationId'] },
+                    ]
+                  }
+                },
+              },
+              {
+                $lookup: {
+                  let: { userId: '$createdBy' },
+                  from: 'users',
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: {
+                          $and: [
+                            { $eq: ['$$userId', '$_id'] },
+                          ]
+                        }
+                      },
+                    }
+                  ],
+                  as: 'user'
+                }
+              },
+              {
+                $unwind: {
+                  path: '$user',
+                  preserveNullAndEmptyArrays: true
+                }
+              }
+            ],
+            as: 'comments'
+          }
+        },
+        {
+          $lookup: {
+            let: { userId: '$createdBy' },
+            from: 'users',
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$$userId', '$_id'] },
+                    ]
+                  }
+                },
+              },
+            ],
+            as: 'createdBy'
+          }
+        },
+        {
+          $unwind: {
+            path: '$createdBy',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $sort: { createdAt: -1 }
+        },
+        {
+          $skip: ((page - 1) * limit)
+        },
+        {
+          $limit: limit
+        }
+      ])
+
+      return publication
     } catch (error) {
       throw error
     }

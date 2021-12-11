@@ -1,5 +1,7 @@
 type Query {
   getPublications(limit: Int!, page: Int!): [Publication]
 
-  getShortPublications(limit: Int!, page: Int!, userId: Int!): [ShortPublication]
+  getShortPublications(limit: Int!, page: Int!, userId: ID!): [ShortPublication]
+
+  getPublication(publicationId: ID!): Publication
 }

@@ -12,6 +12,11 @@ const Query = {
     Publication.getShortPublications(args)
       .catch(error => {
         throw new ApolloError(error)
+      }),
+  getPublication: (_, args) =>
+    Publication.getPublication(args)
+      .catch(error => {
+        throw new ApolloError(error)
       })
 }
 
