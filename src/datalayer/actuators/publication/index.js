@@ -135,14 +135,16 @@ class Publication {
     }
   }
 
-  async getShortPublications({ limit, page, userId }) {
+  async getShortPublications({ limit, page, userName }) {
     try {
+
+      const { _id } = await UserModel.findOne({ userName }, { _id: 1 }).lean()
 
       const publications = await PublicationModel.aggregate([
         {
           $match: {
             status: 'published',
-            createdBy: ObjectId(userId)
+            createdBy: ObjectId(_id)
           }
         },
         {
