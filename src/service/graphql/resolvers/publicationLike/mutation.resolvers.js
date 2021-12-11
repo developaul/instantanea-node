@@ -3,8 +3,8 @@ const { ApolloError } = require("apollo-server-errors");
 const PublicationLike = require("../../../../datalayer/actuators/publicationLike");
 
 const Mutation = {
-  createPublicationLike: (_, args) =>
-    PublicationLike.createPublicationLike(args)
+  createPublicationLike: (_, args, context) =>
+    PublicationLike.createPublicationLike(args, context)
       .catch(error => {
         throw new ApolloError(error)
       }),
