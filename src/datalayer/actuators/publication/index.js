@@ -1,3 +1,4 @@
+const { Types: { ObjectId } } = require('mongoose')
 const PublicationModel = require('../../models/mongo/publication')
 const UserModel = require('../../models/mongo/user')
 
@@ -127,6 +128,42 @@ class Publication {
           $limit: limit
         }
       ])
+
+      return publications
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getShortPublications({ limit, page, userId }) {
+    try {
+
+      const publications = await PublicationModel.aggregate([
+        {
+          $match: {
+            status: 'published',
+            createdBy: ObjectId(userId)
+          }
+        },
+        {
+          $sort: { createdAt: -1 }
+        },
+        {
+          $skip: ((page - 1) * limit)
+        },
+        {
+          $limit: limit
+        },
+        {
+          $project: {
+            _id: 1,
+            media: 1,
+            description: 1
+          }
+        }
+      ])
+
+      console.log("🚀 ~ getShortPublications ~ publications", publications)
 
       return publications
     } catch (error) {

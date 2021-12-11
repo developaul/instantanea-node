@@ -1,3 +1,5 @@
 type Query {
   getPublications(limit: Int!, page: Int!): [Publication]
+
+  getShortPublications(limit: Int!, page: Int!, userId: Int!): [ShortPublication]
 }

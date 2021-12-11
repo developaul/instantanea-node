@@ -5,3 +5,9 @@ type Publication {
   media: String
   description: String
 }
+
+type ShortPublication {
+  _id: ID
+  media: String
+  description: String
+}
