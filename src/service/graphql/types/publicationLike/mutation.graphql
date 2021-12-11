@@ -1,0 +1,5 @@
+type Mutation {
+  createPublicationLike(publicationId: ID!): PublicationLike
+
+  removePublicationLike(publicationLikeId: ID!): PublicationLike
+}

@@ -1,0 +1,5 @@
+type PublicationLike {
+  _id: ID
+  createdBy: ID
+  publicationId: ID
+}
