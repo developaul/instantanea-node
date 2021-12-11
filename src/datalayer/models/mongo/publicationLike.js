@@ -1,7 +1,7 @@
 
 const { Schema, model } = require('mongoose')
 
-const LikeSchema = Schema({
+const PublicationLikeSchema = Schema({
   createdBy: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -14,4 +14,4 @@ const LikeSchema = Schema({
   }
 }, { timestamps: true })
 
-module.exports = model('Like', LikeSchema)
+module.exports = model('PublicationLike', PublicationLikeSchema)

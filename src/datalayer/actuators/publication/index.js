@@ -184,7 +184,7 @@ class Publication {
         {
           $lookup: {
             let: { publicationId: '$_id' },
-            from: 'likes',
+            from: 'commentLikes',
             pipeline: [
               {
                 $match: {
