@@ -18,10 +18,13 @@ class PublicationLike {
     }
   }
 
-  async removePublicationLike({ publicationLikeId }) {
+  async removePublicationLike({ publicationId }, context) {
     try {
+      const { userId } = context.user
+
       const publicationLike = await PublicationLikeModel.findOneAndDelete({
-        _id: publicationLikeId
+        publicationId,
+        createdBy: userId
       }).lean()
 
       return publicationLike

@@ -8,8 +8,8 @@ const Mutation = {
       .catch(error => {
         throw new ApolloError(error)
       }),
-  removePublicationLike: (_, args) =>
-    PublicationLike.removePublicationLike(args)
+  removePublicationLike: (_, args, context) =>
+    PublicationLike.removePublicationLike(args, context)
       .catch(error => {
         throw new ApolloError(error)
       })

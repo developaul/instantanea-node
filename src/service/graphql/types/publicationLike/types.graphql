@@ -1,5 +1,5 @@
 type PublicationLike {
   _id: ID
-  createdBy: ID
+  createdBy: User
   publicationId: ID
 }

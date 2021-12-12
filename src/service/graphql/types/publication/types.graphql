@@ -4,6 +4,8 @@ type Publication {
   createdBy: User
   media: String
   description: String
+  likes: [PublicationLike],
+  currentUserLikes: Boolean
 }
 
 type ShortPublication {

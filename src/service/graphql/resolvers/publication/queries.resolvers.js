@@ -3,8 +3,8 @@ const { ApolloError } = require("apollo-server-errors")
 const Publication = require("../../../../datalayer/actuators/publication")
 
 const Query = {
-  getPublications: (_, args) =>
-    Publication.getPublications(args)
+  getPublications: (_, args, context) =>
+    Publication.getPublications(args, context)
       .catch(error => {
         throw new ApolloError(error)
       }),

@@ -24,8 +24,9 @@ class Publication {
     }
   }
 
-  async getPublications({ limit, page }) {
+  async getPublications({ limit, page }, context) {
     try {
+      const { userId } = context.user
 
       const publications = await PublicationModel.aggregate([
         {
@@ -34,7 +35,7 @@ class Publication {
         {
           $lookup: {
             let: { publicationId: '$_id' },
-            from: 'likes',
+            from: 'publicationlikes',
             pipeline: [
               {
                 $match: {
@@ -46,7 +47,28 @@ class Publication {
                 },
               },
               {
-                $count: 'likes'
+                $lookup: {
+                  let: { userId: '$createdBy' },
+                  from: 'users',
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: {
+                          $and: [
+                            { $eq: ['$$userId', '$_id'] },
+                          ]
+                        }
+                      },
+                    }
+                  ],
+                  as: 'createdBy'
+                }
+              },
+              {
+                $unwind: {
+                  path: '$createdBy',
+                  preserveNullAndEmptyArrays: true
+                }
               }
             ],
             as: 'likes'
@@ -119,6 +141,17 @@ class Publication {
           }
         },
         {
+          $addFields: {
+            currentUserLikes: {
+              $reduce: {
+                input: '$likes',
+                initialValue: false,
+                in: { $eq: ["$$this.createdBy._id", ObjectId(userId)] }
+              }
+            }
+          }
+        },
+        {
           $sort: { createdAt: -1 }
         },
         {
@@ -128,6 +161,8 @@ class Publication {
           $limit: limit
         }
       ])
+
+      console.log("🚀 ~ getPublications ~ publications", JSON.stringify(publications[0], null, 3))
 
       return publications
     } catch (error) {
