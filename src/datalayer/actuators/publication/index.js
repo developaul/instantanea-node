@@ -162,8 +162,6 @@ class Publication {
         }
       ])
 
-      console.log("🚀 ~ getPublications ~ publications", JSON.stringify(publications[0], null, 3))
-
       return publications
     } catch (error) {
       throw error

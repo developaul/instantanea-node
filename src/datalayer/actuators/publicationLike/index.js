@@ -1,4 +1,4 @@
-const { Types: { ObjectId } } = require('mongoose')
+const { Types: { ObjectId }, } = require('mongoose')
 
 const PublicationLikeModel = require('../../models/mongo/publicationLike')
 const UserModel = require('../../models/mongo/user')
@@ -13,11 +13,11 @@ class PublicationLike {
           publicationId,
           createdBy: ObjectId(userId)
         }),
-        UserModel.findOne({ _id: ObjectId(userId) }).lean()
+        UserModel.findById(userId).lean()
       ])
 
       return {
-        ...publicationLike,
+        ...publicationLike._doc,
         createdBy
       }
     } catch (error) {
@@ -34,8 +34,9 @@ class PublicationLike {
           publicationId,
           createdBy: userId
         }).lean(),
-        UserModel.findOne({ _id: ObjectId(userId) }).lean()
+        UserModel.findById(userId).lean()
       ])
+
 
       return {
         ...publicationLike,
